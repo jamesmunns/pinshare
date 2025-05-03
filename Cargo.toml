@@ -1,0 +1,10 @@
+[package]
+name = "pinshare"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+cordyceps = "0.3.3"
+critical-section = { version = "1.2.0", features = ["std"] }
+mutex = { version = "1.0.0", features = ["std", "impl-critical-section"] }
+pin-project = "1.1.10"
