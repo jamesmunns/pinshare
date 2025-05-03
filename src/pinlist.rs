@@ -164,27 +164,39 @@ mod test {
     #[test]
     fn smoke() {
         static LIST: PinList<u64, mutex::raw_impls::cs::CriticalSectionRawMutex> = PinList::new();
-        let one = PinListNode::new_for_list(&LIST, 1);
-        let two = PinListNode::new_for_list(&LIST, 2);
-        let three = PinListNode::new_for_list(&LIST, 3);
-        let one = pin!(one);
-        let two = pin!(two);
-        let three = pin!(three);
-        one.attach();
-        two.attach();
-        three.attach();
+        {
+            let one = PinListNode::new_for_list(&LIST, 1);
+            let two = PinListNode::new_for_list(&LIST, 2);
+            let three = PinListNode::new_for_list(&LIST, 3);
+            let one = pin!(one);
+            let two = pin!(two);
+            let three = pin!(three);
+            one.attach();
+            two.attach();
+            three.attach();
 
-        for x in 1..=3 {
-            let found = LIST.search_mut(|i| {
-                if *i.as_ref() == x {
-                    Some(true)
-                } else {
-                    None
-                }
-            });
-            assert_eq!(found, Some(true));
+            for x in 1..=3 {
+                let found = LIST.search_mut(|i| {
+                    if *i.as_ref() == x {
+                        Some(true)
+                    } else {
+                        None
+                    }
+                });
+                assert_eq!(found, Some(true));
+            }
+            for x in 4..=6 {
+                let found = LIST.search_mut(|i| {
+                    if *i.as_ref() == x {
+                        Some(true)
+                    } else {
+                        None
+                    }
+                });
+                assert_eq!(found, None);
+            }
         }
-        for x in 4..=6 {
+        for x in 1..=3 {
             let found = LIST.search_mut(|i| {
                 if *i.as_ref() == x {
                     Some(true)
